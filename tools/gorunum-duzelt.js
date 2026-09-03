@@ -37,7 +37,14 @@ const fs = require('fs');
 const path = require('path');
 
 /* Varsayılan olarak işlenecek modeller (yerel, gerçek ürün modelleri) */
-const MODELLER = ['barbunya', 'firin-makarna', 'firinda-kalcali-but'];
+const MODELLER = [
+  'barbunya',
+  'firin-makarna',
+  'firinda-kalcali-but',
+  'corba',
+  'koz-patlican-ezme',
+  'tavuk-makarna-patates'
+];
 
 const UNLIT = 'KHR_materials_unlit';
 const JSON_CHUNK = 0x4E4F534A;

@@ -11,6 +11,9 @@ içindeki `glb` / `usdz` alanlarını ilgili yollarla değiştirmek yeterli.
 | Barbunya | ✅ 4.65 MB | ⏳ bekleniyor | — | — |
 | Fırın Makarna | ✅ 4.55 MB | ⏳ bekleniyor | — | — |
 | Fırında Kalçalı But | ✅ 4.96 MB | ⏳ bekleniyor | — | — |
+| Tarhana Çorbası | ✅ 4.33 MB | ⏳ bekleniyor | — | — |
+| Köz Patlıcan Ezmesi | ✅ 3.70 MB | ⏳ bekleniyor | — | — |
+| Tavuk, Makarna ve Patates | ✅ 4.32 MB | ⏳ bekleniyor | — | — |
 
 ## Görünüm: neden unlit?
 
@@ -46,6 +49,9 @@ USDZ gelene kadar bu üç üründe iPhone'da AR oturumu açılmaz; model sayfa i
 | Barbunya | `models/barbunya.glb` | — |
 | Fırın Makarna | `models/firin-makarna.glb` | — |
 | Fırında Kalçalı But | `models/firinda-kalcali-but.glb` | — |
+| Tarhana Çorbası | `models/corba.glb` | — |
+| Köz Patlıcan Ezmesi | `models/koz-patlican-ezme.glb` | — |
+| Tavuk, Makarna ve Patates | `models/tavuk-makarna-patates.glb` | — |
 
 İçecekler ve su için 3D model **yok** — bunlar kompakt satır düzeniyle listelenir
 (`glb: null`). Her kaleme 3D koymak gereksiz, sayfayı da ağırlaştırır.

@@ -21,7 +21,9 @@ const SITE = {
 
 /* --- Kategoriler: hem sekme hem yazılı menü sırası buradan gelir --------- */
 const KATEGORILER = [
+  { id: 'corbalar',     ad: 'Çorbalar' },
   { id: 'ana-yemekler', ad: 'Ana Yemekler' },
+  { id: 'mezeler',      ad: 'Mezeler' },
   { id: 'ekmek-arasi', ad: 'Ekmek Arası' },
   { id: 'burger',      ad: 'Burger' },
   { id: 'hot-dog',     ad: 'Hot Dog' },
@@ -48,6 +50,45 @@ const KATEGORILER = [
    poster         yalnızca kompakt satırlardaki ikon için kullanılır
 -------------------------------------------------------------------------------- */
 const MENU = [
+  {
+    id: 'tarhana-corbasi',
+    ad: 'Tarhana Çorbası',
+    aciklama: 'Geleneksel usulde hazırlanan sıcak tarhana çorbası.',
+    detay: 'Domates ve baharatlarla hazırlanan geleneksel tarhana çorbası, sıcak servis edilir.',
+    icindekiler: null,
+    alerjen: null,
+    fiyat: 195, icecekliFiyat: null,
+    kategori: 'corbalar', rozet: 'Yeni',
+    foto: 'img/corba.png',
+    glb: 'models/corba.glb?v=1', usdz: null,
+    poster: null
+  },
+  {
+    id: 'koz-patlican-ezmesi',
+    ad: 'Köz Patlıcan Ezmesi',
+    aciklama: 'Közlenmiş patlıcan ve köz biberle hazırlanan meze.',
+    detay: 'Közlenmiş patlıcan ve biberlerin harmanlanmasıyla hazırlanan ev usulü soğuk meze.',
+    icindekiler: null,
+    alerjen: null,
+    fiyat: 245, icecekliFiyat: null,
+    kategori: 'mezeler', rozet: 'Yeni',
+    foto: 'img/koz-patlican-ezme.png',
+    glb: 'models/koz-patlican-ezme.glb?v=1', usdz: null,
+    poster: null
+  },
+  {
+    id: 'tavuk-makarna-patates',
+    ad: 'Tavuk, Makarna ve Patates',
+    aciklama: 'Tavuk, makarna ve patatesle hazırlanan doyurucu tabak.',
+    detay: 'Tavuk, makarna ve patatesin birlikte servis edildiği doyurucu ana yemek tabağı.',
+    icindekiler: null,
+    alerjen: null,
+    fiyat: 495, icecekliFiyat: null,
+    kategori: 'ana-yemekler', rozet: 'Yeni',
+    foto: 'img/tavuk-makarna-patates.png',
+    glb: 'models/tavuk-makarna-patates.glb?v=1', usdz: null,
+    poster: null
+  },
   {
     id: 'barbunya',
     ad: 'Barbunya',
