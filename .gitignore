@@ -1,0 +1,7 @@
+# Yerel model yedekleri; yayındaki aktif modeller models/ kökündedir.
+models/_orijinal/
+
+# İşletim sistemi ve editör artıkları
+.DS_Store
+Thumbs.db
+*.log
