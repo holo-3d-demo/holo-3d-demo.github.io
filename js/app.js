@@ -105,7 +105,7 @@
         alt="${kacir(urun.ad)} ürününün üç boyutlu modeli — sürükleyerek çevirebilirsiniz"
         ar
         ar-modes="webxr scene-viewer quick-look"
-        ar-scale="fixed"
+        ar-scale="auto"
         ar-placement="floor"
         camera-controls
         touch-action="pan-y"

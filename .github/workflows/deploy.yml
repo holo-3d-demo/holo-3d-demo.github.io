@@ -23,6 +23,51 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      # ------------------------------------------------------------------
+      # GLB → USDZ (iOS AR Quick Look için)
+      # Blender 4.2 LTS kurulup headless modda dönüştürme yapılır.
+      # ------------------------------------------------------------------
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libxrender1 libxi6 libxkbcommon0 libsm6
+          wget -q "https://download.blender.org/release/Blender4.2/blender-4.2.0-linux-x64.tar.xz"
+          tar -xf blender-4.2.0-linux-x64.tar.xz
+          echo "$(pwd)/blender-4.2.0-linux-x64" >> $GITHUB_PATH
+
+      - name: Convert GLB → USDZ with Blender
+        run: |
+          blender --background --python tools/blender_glb_to_usdz.py
+
+      - name: Update menu.js USDZ paths
+        run: |
+          python3 - <<'EOF'
+          import re
+          from pathlib import Path
+
+          menu = Path("data/menu.js").read_text(encoding="utf-8")
+
+          # Her GLB için eğer karşılık USDZ oluştuysa usdz: null → usdz: 'models/xxx.usdz'
+          def replace_usdz(m):
+              glb_val = m.group(1)        # e.g. models/corba.glb
+              # GLB yolundan model adını al (sorgu parametresi olmadan)
+              clean = glb_val.split("?")[0]         # models/corba.glb
+              stem  = Path(clean).stem               # corba
+              usdz_file = Path(f"models/{stem}.usdz")
+              if usdz_file.exists():
+                  return f"glb: '{glb_val}', usdz: 'models/{stem}.usdz',"
+              return m.group(0)
+
+          menu = re.sub(
+              r"glb:\s*'([^']+)',\s*usdz:\s*null,",
+              replace_usdz,
+              menu
+          )
+          Path("data/menu.js").write_text(menu, encoding="utf-8")
+          print("menu.js güncellendi.")
+          EOF
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
