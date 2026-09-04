@@ -112,7 +112,15 @@
         shadow-intensity="1"
         exposure="0.9"
         environment-image="neutral"
-        reveal="auto"></model-viewer>
+        reveal="auto">
+        <button slot="ar-button" class="btn btn--birincil sahne__ar-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+          Masamda Gör
+        </button>
+      </model-viewer>
       <span class="sahne__ipucu">360° · sürükleyin</span>
       <div class="model-durumu" role="status" aria-live="polite">
         <span class="model-durumu__nokta" aria-hidden="true"></span>
@@ -308,16 +316,15 @@
     if (arDestekSozu) return arDestekSozu;
 
     arDestekSozu = (async () => {
-      /* 1) WebXR — Android Chrome ve XR tarayıcıları */
+      /* 1) iOS — AR Quick Look her zaman iOS 12+ cihazlarda desteklenir.
+         model-viewer'ın slot="ar-button" mekanizması gerçek tespiti yapar. */
+      if (iOSCihaz) return true;
+
+      /* 2) WebXR — Android Chrome ve XR tarayıcıları */
       if (navigator.xr && navigator.xr.isSessionSupported) {
         try {
           if (await navigator.xr.isSessionSupported('immersive-ar')) return true;
         } catch (hata) { /* yoksay, diğer yollara bak */ }
-      }
-      /* 2) iOS AR Quick Look — <a rel="ar"> desteğiyle anlaşılır */
-      if (iOSCihaz) {
-        const baglanti = document.createElement('a');
-        return !!(baglanti.relList && baglanti.relList.supports && baglanti.relList.supports('ar'));
       }
       /* 3) Android Scene Viewer — intent ile açılır, WebXR olmasa da çalışır */
       if (/Android/.test(navigator.userAgent)) return true;
