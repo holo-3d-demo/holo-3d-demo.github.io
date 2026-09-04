@@ -60,7 +60,7 @@ const MENU = [
     fiyat: 195, icecekliFiyat: null,
     kategori: 'corbalar', rozet: 'Yeni',
     foto: 'img/corba.png',
-    glb: 'models/corba.glb?v=1', usdz: null,
+    glb: 'models/corba.glb?v=1', usdz: 'models/corba.glb.usdz',
     poster: null
   },
   {
