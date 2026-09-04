@@ -26,6 +26,24 @@ def sahneyi_temizle():
     for block in bpy.data.images:
         bpy.data.images.remove(block)
 
+def tabani_sifira_hizala():
+    """
+    Modelin en alt noktasını (tabanını) Z=0 (zemin) seviyesine çeker.
+    Bu işlem, LiDAR olmayan telefonlarda masa yüzeyine tutunmayı belirgin şekilde hızlandırır.
+    """
+    min_z = float('inf')
+    for obj in bpy.data.objects:
+        if obj.type == 'MESH':
+            for vertex in obj.data.vertices:
+                world_coord = obj.matrix_world @ vertex.co
+                if world_coord.z < min_z:
+                    min_z = world_coord.z
+                    
+    if min_z != float('inf') and abs(min_z) > 0.0001:
+        for obj in bpy.data.objects:
+            if obj.type == 'MESH':
+                obj.location.z -= min_z
+
 def materyalleri_duzelt():
     """
     Blender'ın glTF importçusu unlit veya saydamlık ayarlı materyalleri USDZ export
@@ -119,6 +137,9 @@ for glb in glb_files:
 
         # GLB'yi içe aktar
         bpy.ops.import_scene.gltf(filepath=str(glb))
+
+        # Tabanı tam sıfır noktasına oturt
+        tabani_sifira_hizala()
 
         # Materyalleri düzenle - USDZ'de renk ve saydamlık kaybını önlemek için
         materyalleri_duzelt()

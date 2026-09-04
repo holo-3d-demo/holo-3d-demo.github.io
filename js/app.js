@@ -98,7 +98,7 @@
   }
 
   function modelHtml(urun) {
-    const usdz = urun.usdz ? ` ios-src="${kacir(urun.usdz)}"` : '';
+    const usdz = urun.usdz ? ` ios-src="${kacir(urun.usdz)}#allowsPlacementScaling=0"` : '';
     return `
       <model-viewer
         src="${kacir(urun.glb)}"${usdz}
@@ -107,6 +107,7 @@
         ar-modes="webxr scene-viewer quick-look"
         ar-scale="fixed"
         ar-placement="floor"
+        ar-prompt="auto"
         camera-controls
         touch-action="pan-y"
         shadow-intensity="1"
