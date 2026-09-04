@@ -28,12 +28,18 @@ def sahneyi_temizle():
 
 def materyalleri_duzelt():
     """
-    Blender'ın glTF importçusu unlit veya emissive materyalleri USDZ export
-    sırasında gri gösterebilecek şekilde import edebilir.
-    Bu fonksiyon her materyali temiz bir Principled BSDF düğümüne bağlar.
+    Blender'ın glTF importçusu unlit veya saydamlık ayarlı materyalleri USDZ export
+    sırasında gri/şeffaf gösterebilecek şekilde import edebilir.
+    Bu fonksiyon her materyali temiz, opak (opaque) ve iki taraflı (double-sided) bir Principled BSDF düğümüne bağlar.
     """
     for mat in bpy.data.materials:
         mat.use_nodes = True
+        mat.use_backface_culling = False  # Arka yüzlerin saydam görünmesini engelle
+        if hasattr(mat, 'blend_mode'):
+            mat.blend_mode = 'OPAQUE'
+        if hasattr(mat, 'shadow_mode'):
+            mat.shadow_mode = 'OPAQUE'
+            
         nodes = mat.node_tree.nodes
         links = mat.node_tree.links
         
@@ -74,6 +80,13 @@ def materyalleri_duzelt():
                 links.remove(link)
             links.new(tex_node.outputs['Color'], base_color_input)
 
+        # Alpha (saydamlık) bağlantısını tamamen temizle ve %100 Opak (1.0) yap
+        alpha_input = bsdf_node.inputs.get('Alpha')
+        if alpha_input:
+            for link in list(alpha_input.links):
+                links.remove(link)
+            alpha_input.default_value = 1.0
+
         # Metallic & Roughness değerlerini ayarla
         if 'Metallic' in bsdf_node.inputs:
             bsdf_node.inputs['Metallic'].default_value = 0.0
@@ -107,7 +120,7 @@ for glb in glb_files:
         # GLB'yi içe aktar
         bpy.ops.import_scene.gltf(filepath=str(glb))
 
-        # Materyalleri düzenle - USDZ'de renk ve doku kaybını önlemek için
+        # Materyalleri düzenle - USDZ'de renk ve saydamlık kaybını önlemek için
         materyalleri_duzelt()
 
         # Tüm texture'ları belleğe al — USDZ'ye gömmek için şart
