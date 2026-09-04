@@ -331,10 +331,9 @@
   function arButonlariniUygula(kok) {
     arDestekleniyorMu().then((destek) => {
       $$('[data-ar-ac]', kok).forEach((btn) => {
-        const urun = MENU.find((u) => u.id === btn.dataset.arAc);
+        /* AR desteklenmiyorsa (masaüstü) QR notunu göster */
         if (!destek) { btn.replaceWith(arNotuOlustur('masaustu')); return; }
-        /* iOS'ta AR Quick Look yalnızca ios-src (USDZ) ile açılır */
-        if (iOSCihaz && urun && !urun.usdz) btn.replaceWith(arNotuOlustur('ios'));
+        /* iOS'ta ios-src olmasa da model-viewer GLB'den AR oluşturabilir — butonu gizleme */
       });
     });
   }
