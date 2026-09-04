@@ -146,6 +146,20 @@
   function modeliAc(sahne, urun, arBaslat) {
     if (!urun.glb) return;
 
+    /* iOS cihazlarda "Masamda Gör"e basıldığında doğrudan Apple AR Quick Look'u aç.
+       #allowsPlacementScaling=0 parametresi Apple Safari tarafından kilitlenir. */
+    if (iOSCihaz && arBaslat && urun.usdz) {
+      const a = document.createElement('a');
+      a.rel = 'ar';
+      a.href = urun.usdz + '?v=5#allowsPlacementScaling=0';
+      const img = document.createElement('img');
+      a.appendChild(img);
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      return;
+    }
+
     if (!sahne.querySelector('model-viewer')) {
       sahne.removeAttribute('data-yuklendi');
       sahne.removeAttribute('data-model-hata');
