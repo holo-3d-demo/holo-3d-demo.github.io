@@ -26,6 +26,67 @@ def sahneyi_temizle():
     for block in bpy.data.images:
         bpy.data.images.remove(block)
 
+def materyalleri_duzelt():
+    """
+    Blender'ın glTF importçusu unlit veya emissive materyalleri USDZ export
+    sırasında gri gösterebilecek şekilde import edebilir.
+    Bu fonksiyon her materyali temiz bir Principled BSDF düğümüne bağlar.
+    """
+    for mat in bpy.data.materials:
+        mat.use_nodes = True
+        nodes = mat.node_tree.nodes
+        links = mat.node_tree.links
+        
+        # Resim dokularını bul
+        tex_node = None
+        for node in nodes:
+            if node.type == 'TEX_IMAGE' and node.image:
+                tex_node = node
+                break
+        
+        if not tex_node:
+            continue
+
+        # Principled BSDF düğümünü bul veya oluştur
+        bsdf_node = None
+        for node in nodes:
+            if node.type == 'BSDF_PRINCIPLED':
+                bsdf_node = node
+                break
+        
+        if not bsdf_node:
+            bsdf_node = nodes.new(type='ShaderNodeBsdfPrincipled')
+        
+        # Output düğümünü bul veya oluştur
+        output_node = None
+        for node in nodes:
+            if node.type == 'OUTPUT_MATERIAL':
+                output_node = node
+                break
+        
+        if not output_node:
+            output_node = nodes.new(type='ShaderNodeOutputMaterial')
+
+        # Doku -> Principled BSDF Base Color bağlantısı yap
+        base_color_input = bsdf_node.inputs.get('Base Color')
+        if base_color_input:
+            for link in list(base_color_input.links):
+                links.remove(link)
+            links.new(tex_node.outputs['Color'], base_color_input)
+
+        # Metallic & Roughness değerlerini ayarla
+        if 'Metallic' in bsdf_node.inputs:
+            bsdf_node.inputs['Metallic'].default_value = 0.0
+        if 'Roughness' in bsdf_node.inputs:
+            bsdf_node.inputs['Roughness'].default_value = 0.7
+
+        # Principled BSDF -> Material Output Surface
+        surface_input = output_node.inputs.get('Surface')
+        if surface_input:
+            for link in list(surface_input.links):
+                links.remove(link)
+            links.new(bsdf_node.outputs['BSDF'], surface_input)
+
 MODELS_DIR = Path(__file__).parent.parent / "models"
 glb_files = list(MODELS_DIR.glob("*.glb"))
 
@@ -45,6 +106,12 @@ for glb in glb_files:
 
         # GLB'yi içe aktar
         bpy.ops.import_scene.gltf(filepath=str(glb))
+
+        # Materyalleri düzenle - USDZ'de renk ve doku kaybını önlemek için
+        materyalleri_duzelt()
+
+        # Tüm texture'ları belleğe al — USDZ'ye gömmek için şart
+        bpy.ops.file.pack_all()
 
         # USDZ olarak dışa aktar
         bpy.ops.wm.usd_export(
