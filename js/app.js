@@ -108,6 +108,7 @@
         ar-scale="fixed"
         ar-placement="floor"
         ar-prompt="auto"
+        disable-zoom
         camera-controls
         touch-action="pan-y"
         shadow-intensity="1"
