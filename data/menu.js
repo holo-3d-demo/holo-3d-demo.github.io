@@ -60,7 +60,7 @@ const MENU = [
     fiyat: 195, icecekliFiyat: null,
     kategori: 'corbalar', rozet: 'Yeni',
     foto: 'img/corba.png',
-    glb: 'models/corba.glb?v=1', usdz: 'models/corba.glb.usdz',
+    glb: 'models/corba.glb?v=1', usdz: 'https://modelviewer.dev/shared-assets/models/Astronaut.usdz', /* TEST - sil sonra */
     poster: null
   },
   {
