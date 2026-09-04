@@ -98,7 +98,7 @@
   }
 
   function modelHtml(urun) {
-    const usdz = urun.usdz ? ` ios-src="${kacir(urun.usdz)}#allowsPlacementScaling=0"` : '';
+    const usdz = urun.usdz ? ` ios-src="${kacir(urun.usdz)}?v=3#allowsPlacementScaling=0"` : '';
     return `
       <model-viewer
         src="${kacir(urun.glb)}"${usdz}
