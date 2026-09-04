@@ -60,7 +60,7 @@ const MENU = [
     fiyat: 195, icecekliFiyat: null,
     kategori: 'corbalar', rozet: 'Yeni',
     foto: 'img/corba.png',
-    glb: 'models/corba.glb?v=1', usdz: null,
+    glb: 'models/corba.glb?v=1', usdz: 'models/corba.glb.usdz',
     poster: null
   },
   {
@@ -73,7 +73,7 @@ const MENU = [
     fiyat: 245, icecekliFiyat: null,
     kategori: 'mezeler', rozet: 'Yeni',
     foto: 'img/koz-patlican-ezme.png',
-    glb: 'models/koz-patlican-ezme.glb?v=1', usdz: null,
+    glb: 'models/koz-patlican-ezme.glb?v=1', usdz: 'models/koz-patlican-ezme.glb.usdz',
     poster: null
   },
   {
@@ -86,7 +86,7 @@ const MENU = [
     fiyat: 495, icecekliFiyat: null,
     kategori: 'ana-yemekler', rozet: 'Yeni',
     foto: 'img/tavuk-makarna-patates.png',
-    glb: 'models/tavuk-makarna-patates.glb?v=1', usdz: null,
+    glb: 'models/tavuk-makarna-patates.glb?v=1', usdz: 'models/tavuk-makarna-patates.glb.usdz',
     poster: null
   },
   {
@@ -99,7 +99,7 @@ const MENU = [
     fiyat: 295, icecekliFiyat: null,
     kategori: 'ana-yemekler', rozet: 'Yeni',
     foto: 'img/barbunya.png',
-    glb: 'models/barbunya.glb?v=2', usdz: null,
+    glb: 'models/barbunya.glb?v=2', usdz: 'models/barbunya.glb.usdz',
     poster: null
   },
   {
@@ -112,7 +112,7 @@ const MENU = [
     fiyat: 325, icecekliFiyat: null,
     kategori: 'ana-yemekler', rozet: 'Yeni',
     foto: 'img/firin-makarna.png',
-    glb: 'models/firin-makarna.glb?v=2', usdz: null,
+    glb: 'models/firin-makarna.glb?v=2', usdz: 'models/firin-makarna.glb.usdz',
     poster: null
   },
   {
@@ -125,7 +125,7 @@ const MENU = [
     fiyat: 495, icecekliFiyat: null,
     kategori: 'ana-yemekler', rozet: 'Yeni',
     foto: 'img/firinda-kalcali-but.png',
-    glb: 'models/firinda-kalcali-but.glb?v=2', usdz: null,
+    glb: 'models/firinda-kalcali-but.glb?v=2', usdz: 'models/firinda-kalcali-but.glb.usdz',
     poster: null
   },
   {
