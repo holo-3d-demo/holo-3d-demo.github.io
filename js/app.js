@@ -111,7 +111,7 @@
   }
 
   function modelHtml(urun) {
-    const usdz = urun.usdz ? ` ios-src="${kacir(urun.usdz)}#allowsPlacementScaling=0"` : '';
+    const usdz = urun.usdz ? ` ios-src="${kacir(urun.usdz)}#allowsContentScaling=0"` : '';
     return `
       <model-viewer
         src="${kacir(urun.glb)}"
@@ -165,7 +165,7 @@
     if (iOSCihaz && arBaslat && urun.usdz) {
       const a = document.createElement('a');
       a.rel = 'ar';
-      a.href = urun.usdz + '?v=1.1#allowsPlacementScaling=0';
+      a.href = urun.usdz + '#allowsContentScaling=0';
       const img = document.createElement('img');
       a.appendChild(img);
       document.body.appendChild(a);
