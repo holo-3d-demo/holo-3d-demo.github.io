@@ -19,6 +19,19 @@
   'use strict';
 
   /* ===========================================================================
+     ZOOM KILIDI — iOS Safari user-scalable=no'yu iOS 10'dan beri yoksayar.
+     Tek güvenilir yöntem: CSS touch-action (style.css'te) + bu JS engelleyici.
+     gesturestart: Safari'ye özgü iki-parmak gestür olayı.
+     touchmove + e.touches.length > 1: çapraz-platform iki-parmak kayma engeli.
+     ======================================================================== */
+  document.addEventListener('gesturestart', (e) => e.preventDefault(), { passive: false });
+  document.addEventListener('gesturechange', (e) => e.preventDefault(), { passive: false });
+  document.addEventListener('gestureend', (e) => e.preventDefault(), { passive: false });
+  document.addEventListener('touchmove', (e) => {
+    if (e.touches.length > 1) e.preventDefault();
+  }, { passive: false });
+
+  /* ===========================================================================
      Yardımcılar
      ======================================================================== */
   const $  = (secici, kok = document) => kok.querySelector(secici);
@@ -98,10 +111,11 @@
   }
 
   function modelHtml(urun) {
-    const usdz = urun.usdz ? ` ios-src="${kacir(urun.usdz)}?v=1.1#allowsPlacementScaling=0"` : '';
+    const usdz = urun.usdz ? ` ios-src="${kacir(urun.usdz)}#allowsPlacementScaling=0"` : '';
     return `
       <model-viewer
-        src="${kacir(urun.glb)}?v=1.1"${usdz}
+        src="${kacir(urun.glb)}"
+        ${usdz}
         alt="${kacir(urun.ad)} ürününün üç boyutlu modeli — sürükleyerek çevirebilirsiniz"
         ar
         ar-modes="webxr scene-viewer quick-look"
@@ -110,11 +124,10 @@
         ar-prompt="auto"
         disable-zoom
         camera-controls
-        touch-action="pan-y"
-        shadow-intensity="1"
-        exposure="0.95"
-        tone-mapping="neutral"
-        environment-image="neutral"
+        touch-action="none"
+        shadow-intensity="0"
+        exposure="1.0"
+        tone-mapping="commerce"
         reveal="auto">
         <button slot="ar-button" class="btn btn--birincil sahne__ar-btn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">

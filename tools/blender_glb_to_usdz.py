@@ -46,13 +46,17 @@ def tabani_sifira_hizala():
 
 def materyalleri_duzelt():
     """
-    Blender'ın glTF importçusu unlit veya saydamlık ayarlı materyalleri USDZ export
-    sırasında gri/şeffaf gösterebilecek şekilde import edebilir.
-    Bu fonksiyon her materyali temiz, opak (opaque) ve iki taraflı (double-sided) bir Principled BSDF düğümüne bağlar.
+    KHR_materials_unlit → USDZ dönüşümünde iPhone RealityKit rengi soluklaştırıyor.
+    Neden: Blender'ın USDZ exporter'ı unlit materyali Principled BSDF olarak yazıyor,
+    Apple RealityKit bunu PBR olarak yorumlayıp ortam ışığını DOKRUNUN ÜZERİNE bindirir.
+    
+    Çözüm: Principled BSDF yerine Emission shader kullan.
+    Emission shader USDZ'de emissive=1 olarak işaretlenir; RealityKit bu durumda
+    ortam ışığı hesabını devre dışı bırakır → renkler orijinal tarama dokusu gibi çıkar.
     """
     for mat in bpy.data.materials:
         mat.use_nodes = True
-        mat.use_backface_culling = False  # Arka yüzlerin saydam görünmesini engelle
+        mat.use_backface_culling = False
         if hasattr(mat, 'blend_mode'):
             mat.blend_mode = 'OPAQUE'
         if hasattr(mat, 'shadow_mode'):
@@ -61,7 +65,7 @@ def materyalleri_duzelt():
         nodes = mat.node_tree.nodes
         links = mat.node_tree.links
         
-        # Resim dokularını bul
+        # Mevcut doku düğümünü bul
         tex_node = None
         for node in nodes:
             if node.type == 'TEX_IMAGE' and node.image:
@@ -71,52 +75,23 @@ def materyalleri_duzelt():
         if not tex_node:
             continue
 
-        # Principled BSDF düğümünü bul veya oluştur
-        bsdf_node = None
-        for node in nodes:
-            if node.type == 'BSDF_PRINCIPLED':
-                bsdf_node = node
-                break
-        
-        if not bsdf_node:
-            bsdf_node = nodes.new(type='ShaderNodeBsdfPrincipled')
-        
-        # Output düğümünü bul veya oluştur
-        output_node = None
-        for node in nodes:
-            if node.type == 'OUTPUT_MATERIAL':
-                output_node = node
-                break
-        
-        if not output_node:
-            output_node = nodes.new(type='ShaderNodeOutputMaterial')
+        # Tüm mevcut düğümleri temizle (Principled BSDF dahil)
+        nodes.clear()
 
-        # Doku -> Principled BSDF Base Color bağlantısı yap
-        base_color_input = bsdf_node.inputs.get('Base Color')
-        if base_color_input:
-            for link in list(base_color_input.links):
-                links.remove(link)
-            links.new(tex_node.outputs['Color'], base_color_input)
+        # Doku düğümünü yeniden oluştur
+        new_tex = nodes.new(type='ShaderNodeTexImage')
+        new_tex.image = tex_node.image
 
-        # Alpha (saydamlık) bağlantısını tamamen temizle ve %100 Opak (1.0) yap
-        alpha_input = bsdf_node.inputs.get('Alpha')
-        if alpha_input:
-            for link in list(alpha_input.links):
-                links.remove(link)
-            alpha_input.default_value = 1.0
+        # Emission shader: dokuyu olduğu gibi çıkarır, ışık hesabı yapmaz
+        emission_node = nodes.new(type='ShaderNodeEmission')
+        emission_node.inputs['Strength'].default_value = 1.0
 
-        # Metallic & Roughness değerlerini ayarla (Işığı önceden pişmiş dokularda soluklaşmayı engellemek için)
-        if 'Metallic' in bsdf_node.inputs:
-            bsdf_node.inputs['Metallic'].default_value = 0.0
-        if 'Roughness' in bsdf_node.inputs:
-            bsdf_node.inputs['Roughness'].default_value = 0.95
+        # Material Output
+        output_node = nodes.new(type='ShaderNodeOutputMaterial')
 
-        # Principled BSDF -> Material Output Surface
-        surface_input = output_node.inputs.get('Surface')
-        if surface_input:
-            for link in list(surface_input.links):
-                links.remove(link)
-            links.new(bsdf_node.outputs['BSDF'], surface_input)
+        # Bağlantılar: Doku → Emission rengi → Output
+        links.new(new_tex.outputs['Color'], emission_node.inputs['Color'])
+        links.new(emission_node.outputs['Emission'], output_node.inputs['Surface'])
 
 MODELS_DIR = Path(__file__).parent.parent / "models"
 glb_files = list(MODELS_DIR.glob("*.glb"))
