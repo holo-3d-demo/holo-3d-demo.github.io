@@ -105,11 +105,11 @@ def materyalleri_duzelt():
                 links.remove(link)
             alpha_input.default_value = 1.0
 
-        # Metallic & Roughness değerlerini ayarla
+        # Metallic & Roughness değerlerini ayarla (Işığı önceden pişmiş dokularda soluklaşmayı engellemek için)
         if 'Metallic' in bsdf_node.inputs:
             bsdf_node.inputs['Metallic'].default_value = 0.0
         if 'Roughness' in bsdf_node.inputs:
-            bsdf_node.inputs['Roughness'].default_value = 0.7
+            bsdf_node.inputs['Roughness'].default_value = 0.95
 
         # Principled BSDF -> Material Output Surface
         surface_input = output_node.inputs.get('Surface')

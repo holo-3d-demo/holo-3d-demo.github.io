@@ -98,10 +98,10 @@
   }
 
   function modelHtml(urun) {
-    const usdz = urun.usdz ? ` ios-src="${kacir(urun.usdz)}?v=3#allowsPlacementScaling=0"` : '';
+    const usdz = urun.usdz ? ` ios-src="${kacir(urun.usdz)}?v=1.1#allowsPlacementScaling=0"` : '';
     return `
       <model-viewer
-        src="${kacir(urun.glb)}"${usdz}
+        src="${kacir(urun.glb)}?v=1.1"${usdz}
         alt="${kacir(urun.ad)} ürününün üç boyutlu modeli — sürükleyerek çevirebilirsiniz"
         ar
         ar-modes="webxr scene-viewer quick-look"
@@ -112,7 +112,8 @@
         camera-controls
         touch-action="pan-y"
         shadow-intensity="1"
-        exposure="0.9"
+        exposure="0.95"
+        tone-mapping="neutral"
         environment-image="neutral"
         reveal="auto">
         <button slot="ar-button" class="btn btn--birincil sahne__ar-btn">
@@ -151,7 +152,7 @@
     if (iOSCihaz && arBaslat && urun.usdz) {
       const a = document.createElement('a');
       a.rel = 'ar';
-      a.href = urun.usdz + '?v=5#allowsPlacementScaling=0';
+      a.href = urun.usdz + '?v=1.1#allowsPlacementScaling=0';
       const img = document.createElement('img');
       a.appendChild(img);
       document.body.appendChild(a);
